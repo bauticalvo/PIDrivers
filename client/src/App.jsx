@@ -10,8 +10,7 @@ import Detail from './components/Detail/Detail'
 function App() {
 
   const location = useLocation()
-  const drivers = [{forename: 'lewis', surname:'Hamilton', 
-  teams: 'Ferrari', image: 'no pic' }]
+ 
 
 
   return (
@@ -22,7 +21,7 @@ function App() {
          }
         <Routes>
           <Route path='/' element={<Landing />}/>
-          <Route path='/home' element={<Home driver={drivers}/>} />
+          <Route path='/home' element={<Home />} />
           <Route path='/form' element={<Form/>} />
           <Route path='/detail' element={<Detail/>} />
         </Routes>

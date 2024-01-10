@@ -2,14 +2,14 @@ import React from 'react'
 import Card from '../Card/Card'
 
 
-const Cards = ({driver}) => {
+const Cards = ({drivers}) => {
   return (
     <div>
 
       {
-      driver.map(driver => 
+      drivers.map(driver => 
       <Card 
-        name={`${driver.forname}${driver.surname}`} 
+        name={`${driver.forename}${' '}${driver.surname}`} 
         teams={driver.teams}
         image={driver.image}
       />)

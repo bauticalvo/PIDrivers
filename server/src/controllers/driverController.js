@@ -78,13 +78,13 @@ const getDriversName = async (name)=>{
 }
     // -------- SE CREA UN DRIVER -------- //
 
-const postDrivers = async(forename, surname, image, dob, nationality, 
-     description, teams)=>{
+const postDrivers = async(forename, surname,description, image, nationality,dob, 
+      teams)=>{
        
         const driver = await Driver.create({           // no se puede hacer con findOrCreate ya que este trae un arreglo con la instancia creada y un booleano que indica si se creo o no
             
-             forename, surname, image, dob, nationality, 
-         description
+             forename, surname, description,image, nationality,dob 
+         
         })
        // -------- RELACION DRIVER-TEAMS -------- //
 
