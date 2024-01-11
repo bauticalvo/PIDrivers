@@ -109,3 +109,16 @@
   background-color: #82f59d;
 }
 
+/*  ------  Form  ------  */
+
+.form{
+  background-color: #343a40;
+  color: #fff;
+}
+
+.image{
+  width: 800px;
+}
+.desc{
+  width: 700px;
+}

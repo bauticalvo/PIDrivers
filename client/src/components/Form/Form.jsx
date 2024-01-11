@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '../../estilos/style.css'
-
+import validation from '../Util/validation'
 
 export const Form = () => {
 
@@ -14,7 +14,89 @@ export const Form = () => {
     teams: []
   })
 
+  const [errors, setErrors] = useState({
+    forename: '',
+    surname: '',
+    description: '',
+    image: '',
+    nationality: '',
+    dob: '',
+    teams: '',
+  })
+
   const teams = ['Ferrari', 'Mercedes', 'Red Bull', 'Mustang']
+
+  const validate = (driverData, name)=>{
+
+   const regexChar = /^[a-zA-Z\s'-ñ]+$/
+   const regexDescription = /^[a-zA-Z0-9\s,.ñ]+$/
+   const regexDob = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19[0-9][0-9]|20[0-1][0-9]|202[0-3])$/
+      const regexImage = /^data:image\/(png|jpeg|jpg|gif);base64,([a-zA-Z0-9+/]+={0,2})$/
+
+   // ---- Validacion de forename ---- //
+    if(name === 'forename'){
+      let fore = driverData.forename
+      if(fore.length === 0) setErrors({...errors, forename: "Debe ingresar un nombre"})
+      if(fore.length >0 ){
+        if(fore.length > 15) setErrors({...errors, forename: "El nombre no debe tener mas de 15 caracteres"})
+        if(fore.length < 3)setErrors({...errors, forename: "El nombre no debe tener menos de 3 caracteres"})
+        if(fore.length>= 3 && fore.length <= 15 )setErrors({...errors, forename: ""})
+        if(!regexChar.test(driverData.forename)) setErrors({...errors, forename: 'El nombre no debe tener caracteres especiales'})
+    }
+    }
+    // ---- Validacion de surname ---- //
+    if(name === 'surname'){
+      let sur = driverData.surname
+      if(sur.length === 0) setErrors({...errors, surname: "Debe ingresar un apellido"})
+      if(sur.length >0 ){
+        if(sur.length > 15) setErrors({...errors, surname: "El apellido no debe tener mas de 15 caracteres"})
+        if(sur.length < 3)setErrors({...errors, surname: "El apellido no debe tener menos de 3 caracteres"})
+        if(sur.length>= 3 && sur.length <= 15 )setErrors({...errors, surname: ""})
+        if(!regexChar.test(driverData.surname)) setErrors({...errors, surname: 'El apellido no debe tener caracteres especiales'})
+    }
+    }
+    // ---- Validacion de description ---- //
+    if(name === 'description'){
+      let desc = driverData.description
+      if(desc.length === 0) setErrors({...errors, description: "Debe ingresar una descripcion"})
+      if(desc.length > 0){
+        if(desc.length > 100) setErrors({...errors, description: "La descripcion no debe tener mas de 100 caracteres"})
+        if(desc.length < 10)setErrors({...errors, description: "La descripcion no debe tener menos de 10 caracteres"})
+        if(desc.length>= 10 && desc.length <= 100 )setErrors({...errors, description: ""})
+        if(!regexDescription.test(driverData.description)) setErrors({...errors, description: 'La descripcion no debe tener caracteres especiales'})
+      }
+    }
+    // ---- Validacion de image ---- //
+    if(name === 'image'){
+      let img = driverData.image
+      if(img.length === 0) setErrors({...errors, image: "Debe ingresar una URL"})
+      if(img.length > 0){
+        if(img.length>= 1 )setErrors({...errors, image: ""})
+        if(!regexImage.test(driverData.image)) setErrors({...errors, image: 'La URL debe ser valida'})
+      }
+    }
+
+    // ---- Validacion de dob ---- //
+    if(name === 'dob'){
+      let date = driverData.dob
+      if(date.length === 0) setErrors({...errors, dob: "Debe ingresar la fecha de nacimiento"})
+      if(date.length > 0){
+        if(!regexDob.test(driverData.dob)) setErrors({...errors, dob: 'Debe ingresar una fecha valida'})
+        else setErrors({...errors, dob: ''})
+      }
+    }
+    // ---- Validacion de nationality ---- //
+    if(name === 'nationality'){
+      let nation = driverData.nationality
+      if(nation.length === 0) setErrors({...errors, nationality: "Debe ingresar una nacionalidad"})
+      if(nation.length > 0){
+        if(nation.length>= 1 && nation.length <= 10 )setErrors({...errors, nationality: ""})
+        if(!regexChar.test(driverData.nationality)) setErrors({...errors, nationality: 'La nacionalidad no debe tener caracteres especiales'})
+      }
+    }
+    // ---- Validacion de teams ---- //
+  }
+
 
   const handleChange = (event) =>{
     event.preventDefault();
@@ -30,28 +112,84 @@ export const Form = () => {
       ...driverData,
       [event.target.name]: event.target.value
     })
+    validate({
+      ...driverData,
+      [event.target.name]: event.target.value
+        },event.target.name
+        )
   }
+  
+  const deleteFunction = (team) => {
+    setdriverData({
+      ...driverData,
+      teams: driverData.teams.filter((t) => t !== team)
+    });
+  };
+  const disabledFunction = ()=>{
+    let disabled = true;
+    for(let error in errors){
+      if(errors[error] === '') return false;
+      else{
+        return true
+        break;
+      }
+    }
+    return disabled
+  }  
 
+  const inputFunction = () =>{
+    let disabledVar = true;
+    let data = driverData
+    if(!data.forename === "" && !data.surname === "" && !data.description === "" && !data.dob === "" && !data.image && !data.nationality){
+      disabledVar = false;
+    }
+    return disabledVar;
+  }
+  
   return (
     <div className='form'>
-      { console.log(driverData)},
       <form>
-        <input type='text' name='forename' placeholder='Nombre' onChange={handleChange}></input>
-        <input type='text' name='surname' placeholder='Apellido' onChange={handleChange}></input>
-        <input type='text' name='description' placeholder='Descripcion' onChange={handleChange}></input>
-        <input type='text' name='image' placeholder='URL de la imagen' onChange={handleChange}></input>
-        <input type='text' name='nationality' placeholder='Nacionalidad' onChange={handleChange}></input>
-        <input type='text' name='dob' placeholder='Fecha de Nacimiento' onChange={handleChange}></input>
+        <input type='text' name='forename' placeholder='Nombre' onChange={handleChange} onInput={inputFunction}></input>
+        <p>{errors.forename ? errors.forename : null}</p>
+        <input type='text' name='surname' placeholder='Apellido' onChange={handleChange} onInput={inputFunction}></input>
+        <p>{errors.surname ? errors.surname : null}</p>
+        <input type='text' name='nationality' placeholder='Nacionalidad' onChange={handleChange} onInput={inputFunction}></input>
+        <p>{errors.nationality ? errors.nationality : null}</p>
+        <input type='text' name='dob' placeholder='Fecha de Nacimiento' onChange={handleChange} onInput={inputFunction}></input>
+        <p>{errors.dob ? errors.dob : null}</p>
+        <input type='text' name='description' placeholder='Descripcion' className='desc' onChange={handleChange} onInput={inputFunction}></input>
+        <p>{errors.description ? errors.description : null}</p>
+        <input type='text' name='image' placeholder='URL de la imagen' className='image' onChange={handleChange} onInput={inputFunction}></input>
+        <p>{errors.image ? errors.image : null}</p>
         <div>
           <label>Seleccionar Escuderias</label>
           <select onChange={handleChange} name='teams' >
             {
-              teams.map( team => <option key={team} value={team}>{team}</option>)
+              teams.map( team => 
+              <option 
+              key={team} 
+              value={team}>
+              {team}</option>)
             }
           </select>
+          {
+            driverData.teams.map( team =>
+              <div key={team}>
+                <span>{team}</span>
+                  <button 
+                   type='button' 
+                   onClick={() =>deleteFunction(team)}>
+                   🗑️</button>
+              </div>)
+          }
         </div>
-            <input type='submit'></input>
+            <input
+             type='submit'
+             disabled={disabledFunction() || inputFunction()}
+             ></input>
       </form>
       </div>
   )
 }
+//errors.forename || errors.surname || errors.description || errors.dob
+//|| errors.nationality || errors.image
