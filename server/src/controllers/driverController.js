@@ -80,7 +80,7 @@ const getDriversName = async (name)=>{
 
 const postDrivers = async(forename, surname,description, image, nationality,dob, 
       teams)=>{
-       await axios.get('http://localhost:3001/teams/') //carga de los teams a la DB para poder buscarlos el la DB(eso se realiza mas abajo)
+        //carga de los teams a la DB para poder buscarlos el la DB(eso se realiza mas abajo)
         const driver = await Driver.create({           // no se puede hacer con findOrCreate ya que este trae un arreglo con la instancia creada y un booleano que indica si se creo o no
             
              forename, surname, description,image, nationality,dob 

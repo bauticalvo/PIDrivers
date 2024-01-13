@@ -106,7 +106,7 @@ export const Form = () => {
   const handleChange = (event) =>{
     event.preventDefault();
     if(event.target.name === 'teams'){
-      if(driverData.teams.includes(event.target.value)) return; 
+      if(driverData.teams.includes(event.target.value)) return;    // para que no se repita los teams en el select
       setdriverData({
         ...driverData,
         [event.target.name]: [...driverData[event.target.name], event.target.value]
