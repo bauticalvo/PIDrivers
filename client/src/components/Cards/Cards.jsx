@@ -8,11 +8,29 @@ const Cards = ({drivers}) => {
 
       {
       drivers.map(driver => 
-      <Card 
-        name={`${driver.forename}${' '}${driver.surname}`} 
-        teams={driver.teams}
-        image={driver.image}
-      />)
+
+        {if(driver.hasOwnProperty('forename')){     //Muestra los drivers de la DB
+          console.log(driver);
+          return (
+          <Card 
+            key={driver.forename}
+            name={driver.forename} 
+            surname={driver.surname}
+            teams={driver.teams}
+            image={driver.image}
+          />)
+        } else{
+          return(                                   //Muestra los drivers de la api
+          <Card 
+            key={driver.name.forename}
+            name={driver.name.forename} 
+            surname={driver.name.surname}
+            teams={driver.teams}
+            image={driver.image.url}
+          />)
+        }
+      }
+      )
       }
     </div>
     

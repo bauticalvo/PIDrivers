@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../../estilos/style.css'
 import Cards from '../Cards/Cards'
+import { useDispatch, useSelector } from 'react-redux'
+import { getDriver } from '../../Redux/actions'
 
 const Home = () => {
 
-  const drivers = [{forename: 'Lewis', surname:'Hamilton', 
-  teams: 'Ferrari', image: 'no pic' },{forename: 'Lionel', surname:'Messi', 
-  teams: 'Red Bull', image: 'goat'  },{forename: 'Bauti', surname:'Calvo', 
-  teams: 'Mercedes', image: 'no pic' }]
+  const dispatch = useDispatch()
+  const allDrivers = useSelector(state => state.allDrivers)       // traemos del estado global allDrivers, que contiene los drivers del back
 
+  console.log(allDrivers);
+
+  useEffect(()=>{
+    dispatch(getDriver())
+  },[])
   return (
     <div className='home'>
-        <h1>home</h1>
-        <Cards drivers={drivers}></Cards>
+        <Cards drivers={allDrivers}></Cards>
     </div>
   )
 }

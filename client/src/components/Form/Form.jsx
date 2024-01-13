@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import '../../estilos/style.css'
 import validation from '../Util/validation'
+import { useDispatch } from 'react-redux'
+import { postDriver } from '../../Redux/actions'
 
 export const Form = () => {
+
+  const dispatch = useDispatch()
 
   const [driverData, setdriverData] = useState({
     forename: '',
@@ -21,7 +25,7 @@ export const Form = () => {
     image: '',
     nationality: '',
     dob: '',
-    teams: '',
+    teams: ''
   })
 
   const teams = ['Ferrari', 'Mercedes', 'Red Bull', 'Mustang']
@@ -67,14 +71,14 @@ export const Form = () => {
       }
     }
     // ---- Validacion de image ---- //
-    if(name === 'image'){
+    /*if(name === 'image'){
       let img = driverData.image
       if(img.length === 0) setErrors({...errors, image: "Debe ingresar una URL"})
       if(img.length > 0){
         if(img.length>= 1 )setErrors({...errors, image: ""})
         if(!regexImage.test(driverData.image)) setErrors({...errors, image: 'La URL debe ser valida'})
       }
-    }
+    }*/
 
     // ---- Validacion de dob ---- //
     if(name === 'dob'){
@@ -95,6 +99,7 @@ export const Form = () => {
       }
     }
     // ---- Validacion de teams ---- //
+    
   }
 
 
@@ -119,48 +124,44 @@ export const Form = () => {
         )
   }
   
+  const handleSubmit = (event)=>{
+    event.preventDefault();
+    console.log(driverData);
+    dispatch(postDriver(driverData))
+  }
+
   const deleteFunction = (team) => {
     setdriverData({
       ...driverData,
       teams: driverData.teams.filter((t) => t !== team)
     });
   };
-  const disabledFunction = ()=>{
-    let disabled = true;
-    for(let error in errors){
-      if(errors[error] === '') return false;
-      else{
-        return true
-        break;
-      }
-    }
-    return disabled
-  }  
-
-  const inputFunction = () =>{
+   
+  
+  const disabledFunction = () =>{
     let disabledVar = true;
-    let data = driverData
-    if(!data.forename === "" && !data.surname === "" && !data.description === "" && !data.dob === "" && !data.image && !data.nationality){
-      disabledVar = false;
+    
+    for(let data in driverData){
+      if(driverData[data] === '' || errors[data] !== '') return true;
     }
+    if(driverData.teams.length > 0 ) return false
     return disabledVar;
   }
-  
   return (
     <div className='form'>
-      <form>
-        <input type='text' name='forename' placeholder='Nombre' onChange={handleChange} onInput={inputFunction}></input>
+      <form onSubmit={handleSubmit}>
+        <input type='text' name='forename' placeholder='Nombre' onChange={handleChange} ></input>
         <p>{errors.forename ? errors.forename : null}</p>
-        <input type='text' name='surname' placeholder='Apellido' onChange={handleChange} onInput={inputFunction}></input>
+        <input type='text' name='surname' placeholder='Apellido' onChange={handleChange} ></input>
         <p>{errors.surname ? errors.surname : null}</p>
-        <input type='text' name='nationality' placeholder='Nacionalidad' onChange={handleChange} onInput={inputFunction}></input>
+        <input type='text' name='nationality' placeholder='Nacionalidad' onChange={handleChange} ></input>
         <p>{errors.nationality ? errors.nationality : null}</p>
-        <input type='text' name='dob' placeholder='Fecha de Nacimiento' onChange={handleChange} onInput={inputFunction}></input>
-        <p>{errors.dob ? errors.dob : null}</p>
-        <input type='text' name='description' placeholder='Descripcion' className='desc' onChange={handleChange} onInput={inputFunction}></input>
-        <p>{errors.description ? errors.description : null}</p>
-        <input type='text' name='image' placeholder='URL de la imagen' className='image' onChange={handleChange} onInput={inputFunction}></input>
+        <input type='text' name='image' placeholder='URL de la imagen' className='image' onChange={handleChange} ></input>
         <p>{errors.image ? errors.image : null}</p>
+        <input type='text' name='dob' placeholder='Fecha de Nacimiento' onChange={handleChange} ></input>
+        <p>{errors.dob ? errors.dob : null}</p>
+        <input type='text' name='description' placeholder='Descripcion' className='desc' onChange={handleChange} ></input>
+        <p>{errors.description ? errors.description : null}</p>
         <div>
           <label>Seleccionar Escuderias</label>
           <select onChange={handleChange} name='teams' >
@@ -172,6 +173,7 @@ export const Form = () => {
               {team}</option>)
             }
           </select>
+
           {
             driverData.teams.map( team =>
               <div key={team}>
@@ -185,11 +187,9 @@ export const Form = () => {
         </div>
             <input
              type='submit'
-             disabled={disabledFunction() || inputFunction()}
+             disabled={ disabledFunction()}
              ></input>
       </form>
       </div>
   )
 }
-//errors.forename || errors.surname || errors.description || errors.dob
-//|| errors.nationality || errors.image
