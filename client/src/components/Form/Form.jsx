@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../estilos/style.css'
 import validation from '../Util/validation'
-import { useDispatch } from 'react-redux'
-import { postDriver } from '../../Redux/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { getTeams, postDriver } from '../../Redux/actions'
 
 export const Form = () => {
 
   const dispatch = useDispatch()
+  const allTeams = useSelector(state => state.allTeams)
+  const teams = allTeams.sort((a,b)=>{
+    return a.localeCompare(b, 'es', { sensitivity: 'base' })
+  })
+
+  useEffect(()=>{
+    dispatch(getTeams())
+  },[])
 
   const [driverData, setdriverData] = useState({
     forename: '',
@@ -28,14 +36,15 @@ export const Form = () => {
     teams: ''
   })
 
-  const teams = ['Ferrari', 'Mercedes', 'Red Bull', 'Mustang']
 
   const validate = (driverData, name)=>{
 
    const regexChar = /^[a-zA-Z\s'-ñ]+$/
    const regexDescription = /^[a-zA-Z0-9\s,.ñ]+$/
    const regexDob = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19[0-9][0-9]|20[0-1][0-9]|202[0-3])$/
-      const regexImage = /^data:image\/(png|jpeg|jpg|gif);base64,([a-zA-Z0-9+/]+={0,2})$/
+   const regexImage = /^data:image\/(png|jpeg|jpg|gif);base64,([a-zA-Z0-9+/]+={0,2})$/
+   const regexImage2 = /^https:\/\/[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(\/[^\/]*)*\/?$/
+
 
    // ---- Validacion de forename ---- //
     if(name === 'forename'){
@@ -71,14 +80,14 @@ export const Form = () => {
       }
     }
     // ---- Validacion de image ---- //
-    /*if(name === 'image'){
+    if(name === 'image'){
       let img = driverData.image
       if(img.length === 0) setErrors({...errors, image: "Debe ingresar una URL"})
       if(img.length > 0){
         if(img.length>= 1 )setErrors({...errors, image: ""})
-        if(!regexImage.test(driverData.image)) setErrors({...errors, image: 'La URL debe ser valida'})
+        if(!regexImage.test(driverData.image) && !regexImage2.test(driverData.image)) setErrors({...errors, image: 'La URL debe ser valida'})
       }
-    }*/
+    }
 
     // ---- Validacion de dob ---- //
     if(name === 'dob'){
@@ -146,9 +155,12 @@ export const Form = () => {
     }
     if(driverData.teams.length > 0 ) return false
     return disabledVar;
+
+  
+  
   }
   return (
-    <div className='form'>
+    <div className='form'> {console.log(driverData)}
       <form onSubmit={handleSubmit}>
         <input type='text' name='forename' placeholder='Nombre' onChange={handleChange} ></input>
         <p>{errors.forename ? errors.forename : null}</p>
@@ -165,6 +177,7 @@ export const Form = () => {
         <div>
           <label>Seleccionar Escuderias</label>
           <select onChange={handleChange} name='teams' >
+            
             {
               teams.map( team => 
               <option 

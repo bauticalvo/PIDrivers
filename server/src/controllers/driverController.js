@@ -1,10 +1,9 @@
 const {Driver, Teams} = require('../db')
 const axios = require('axios')
 
-const defaultImage = 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fst3.depositphotos.com%2F9141348%2F14671%2Fv%2F450%2Fdepositphotos_146717605-stock-illustration-user-icon-vector.jpg&tbnid=4286uwW2fCuhSM&vet=12ahUKEwjDtvix77CDAxWyNDUKHeMUBysQMygCegQIARA5..i&imgrefurl=https%3A%2F%2Fdepositphotos.com%2Fes%2Fphotos%2Fsin-rostro.html&docid=E0xyy5WHSqq_qM&w=600&h=600&itg=1&q=imagen%20de%20persona%20sin%20cara&hl=es&ved=2ahUKEwjDtvix77CDAxWyNDUKHeMUBysQMygCegQIARA5'
 
 const getDriversDB = async() => {
-    const driversDB = await Driver.findAll({  //trae los modelos relacionados de la DB
+    const driversDB = await Driver.findAll({  
         include:
             {
                 model: Teams,
@@ -28,6 +27,7 @@ const getDriversDB = async() => {
             
         }
     })
+    
     return driverMap;
 }
 
@@ -39,60 +39,62 @@ const getDriversAPI = async()=>{
 const getDrivers =async (name) =>{    
     const driversDB = await getDriversDB();
     const driversApi = await getDriversAPI();
-    const allDrivers = [...driversDB, ...driversApi] //se puede cambiar el orden
-
-    allDrivers.forEach(async driver=>{
-        if(!driver.image){
-            driver.image = defaultImage;
-        }
-    })
+    const allDrivers = [...driversDB, ...driversApi] 
     if(name){
-        const driver = allDrivers.filter(driver => 
-            driver.name.forename.toLowerCase().includes(name.toLowerCase())
-            )
-        return driver.splice(0,15);
+        let driverName = []
+        allDrivers.forEach(driver => {
+            if(driver){
+                 if(driver.hasOwnProperty('name') && driver.name.forename.toLowerCase().includes(name.toLowerCase())) {
+                driverName.push(driver)
+                return
+               
+            } else if( driver.hasOwnProperty('forename') && driver.forename.toLowerCase().includes(name.toLowerCase())) {
+                driverName.push(driver)
+                return
+            }
+            }
+           
+    })
+        return driverName.splice(0,15);
     }
     
     return allDrivers;
 }
 
-    const getDriversId = async (id)=>{
-        if(isNaN(id)){
-            const idDriver = await Driver.findByPk(id)
-        return idDriver;
+    const getDriversId = async (idD)=>{
+        if(isNaN(idD)){
+            const idDriver = await Driver.findByPk(idD)
+            const {id, forename, surname, description,image, nationality,dob } = idDriver
+            const d = {id, forename, surname, description,image, nationality,dob }
+            const dbDriver = await getDriversDB()
+            await dbDriver.forEach( driver => {
+                if(driver.id == idD) d.teams = driver.teams
+            })
+        return d;
         }
         const request = (await axios.get('http://localhost:5000/drivers')).data
-        const filteredDrivers = request.find( (driver) => driver.id === Number(id) 
+        const filteredDrivers = request.find( (driver) => driver.id === Number(idD) 
         )
         return filteredDrivers;
 }
 
-const getDriversName = async (name)=>{
-    const allDrivers = getDrivers();
-    if(name){
-        const driver = allDrivers.filter(driver => 
-            driver.name.forename.toLowerCase().include(name.toLowerCase())
-            )
-        return driver.splice(0,15);
-    }
-}
-    // -------- SE CREA UN DRIVER -------- //
+
 
 const postDrivers = async(forename, surname,description, image, nationality,dob, 
       teams)=>{
-        //carga de los teams a la DB para poder buscarlos el la DB(eso se realiza mas abajo)
-        const driver = await Driver.create({           // no se puede hacer con findOrCreate ya que este trae un arreglo con la instancia creada y un booleano que indica si se creo o no
+     
+        const driver = await Driver.create({           
             
              forename, surname, description,image, nationality,dob 
          
         })
-       // -------- RELACION DRIVER-TEAMS -------- //
+      
 
-        teams.forEach( async(team) => {                // el arreglo teams pasado por parametro lo recorremos
-            let teamDB= await Teams.findAll({          //creamos una variable para buscar todos los teams de la DB
-                where: {name : team}                   // donde el nombre coincida con el team de la DB
+        teams.forEach( async(team) => {               
+            let teamDB= await Teams.findAll({          
+                where: {name : team}                   
             })
-            await driver.addTeams(teamDB)              //agregamos el team al driver creado
+            await driver.addTeams(teamDB)              
             console.log('Team agregado con exito');
         })
         console.log("  ----  Driver creado con exito  ----  ");
@@ -101,6 +103,6 @@ const postDrivers = async(forename, surname,description, image, nationality,dob,
         
 }
 
-module.exports = {getDrivers, getDriversId, getDriversName, postDrivers} ; 
+module.exports = {getDrivers, getDriversId, postDrivers} ; 
 
 //console.log(allDrivers[1].teams.split(', ').join(',').split(','));

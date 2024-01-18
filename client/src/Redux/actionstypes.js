@@ -1,1 +1,10 @@
 export const GET_DRIVER = 'GET_DRIVER'
+export const PAGINATION = 'PAGINATION'
+export const FILTER = 'FILTER'
+export const ORDER = 'ORDER'
+export const ORDER_DOB = 'ORDER_DOB'
+export const FILTER_TEAMS = "FILTER_TEAMS"
+export const DETAIL = 'DETAIL'
+export const GET_TEAMS = 'GET_TEAMS'
+export const SEARCH = 'SEARCH'
+export const REFRESH = 'REFRESH'

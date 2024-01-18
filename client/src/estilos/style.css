@@ -1,7 +1,6 @@
 /*   ----- Landing -----   */
 
 .landing{
-    text-align: center;
     background-image: url(https://wallpapers.com/images/hd/red-bull-f1-rb14-9atrk600o8ti42jl.jpg);
   background-position: center;
   background-attachment: fixed;
@@ -10,15 +9,27 @@
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display:block;
+ padding-top: 100px;
+ padding-left: 300px;
 }
 
+
+.div4{
+  font-family: 'Gill Sans';
+  color:#76a3ec;
+  text-shadow: #081c3b;
+
+  
+}
+
+.div3, .divbuttonlanding{
+  padding: 5px;
+}
 .buttonlanding{
   min-width: 130px;
   height: 40px;
-  color: #fff;
+  color: #000;
   padding: 5px 10px;
   font-weight: bold;
   cursor: pointer;
@@ -29,7 +40,8 @@
   overflow: hidden;
   border-radius: 5px;
   border: none;
-  background-color: #343a40
+  background-color: #f15743d3;
+  
 }
 .buttonlanding:hover {
   border-radius: 5px;
@@ -55,7 +67,7 @@
 /*    ------  Home  ------    */
 
 .home{
-  background-image: url(https://theobjective.com/wp-content/uploads/2023/01/formula-1.jpg);
+  background-image: url(https://library.sportingnews.com/styles/crop_style_16_9_desktop/s3/2023-05/nba-plain--53e78b26-2fb9-4c2d-93fb-72951d7692b8.png?h=920929c4&itok=zMvcgrHV);
   background-position: center;
   background-attachment: fixed;
   background-size: cover;
@@ -64,20 +76,13 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
-
-
-
-/*  ------  NavBar  ------  */
-
-.navBar{
-  background-color: #021f4e;
+.filtros{
   display: flex;
-  height: 50px;
-  padding: 20px;  
-  justify-content: space-evenly;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #073a3fbd;
 }
- 
-.navbuttoms {
+.button2 {
   min-width: 130px;
   height: 40px;
   color: #fff;
@@ -88,32 +93,89 @@
   position: relative;
   display: inline-block;
   outline: none;
-  border: 1px solid #000;
+  border-radius: 5px;
+  border: none;
+  background-size: 120% auto;
+  background-image: linear-gradient(315deg, #000428 0%, #004e92 75%);
+}
+.button2:hover {
+  background-position: right center;
+}
+.button2:active {
+  top: 2px;
+}
+
+.divselect{
   color: #000;
-  background: transparent;
-  z-index: 0;
+  font-family:Stencil Std, fantasy;
+
 }
-.navbuttoms:after {
-  top: 0;
-  left: 0;
+
+/*  ------  NavBar  ------  */
+
+.navBar{
+  background-color: #0f636b;
+  display: flex;
+  height: 50px;
+  padding: 20px;  
+  justify-content: space-evenly;
+  font-family:Stencil Std, fantasy;
+  color: #000;
 }
-.navbuttoms:after {
-  content: "";
-  width: 100%;
-  z-index: -1;
-  position: absolute;
-  height: 100%;
-  top: 5px;
-  left: 5px;
-  transition: 0.2s;
-  background-color: #82f59d;
+.navbuttoms {
+  min-width: 130px;
+  height: 40px;
+  color: #000;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 20px;
+  border: 2px solid #02315e;
+  background: #02315e;
 }
+.navbuttoms:hover {
+  background: #0f636b;
+  color: #000;
+
+}
+/*  ------  SearchBar  ------  */
+.navbuttoms1 {
+  min-width: 70px;
+  height: 40px;
+  color: #000;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  border-radius: 20px;
+  border: 2px solid #02315e;
+  background: #02315e;
+}
+.navbuttoms1.divbuttonlanding {
+  background: #0f636b;
+  color: #000;
+
+}
+
+
 
 /*  ------  Form  ------  */
 
 .form{
   background-color: #343a40;
   color: #fff;
+  background-image: url('https://e00-marca.uecdn.es/assets/multimedia/imagenes/2023/08/14/16920102737747.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  height: 555px;
 }
 
 .image{
@@ -125,9 +187,69 @@
 
 /*  ------  Card ------  */
 
-
+.card{
+  flex-wrap: wrap;
+  width: 250px;
+  background-color: #081c3b;
+  border-radius: 10%;
+  height: 340px;
+  padding: 10px;
+  font-family:Stencil Std, fantasy;
+color: #000;
+word-wrap: break-word;
+}
 
 .imgCard{
   height: 150px;
   width: 150px;
+}
+
+/*  ------  Cards ------  */
+
+.cards{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+  gap: 1px;
+  padding-top: 10px;
+  align-items: center;
+  height: 100vh;
+}
+
+/*  ------  Detail ------  */
+
+
+.divdetail{
+  background-image: url(https://img.freepik.com/vector-premium/fondo-degradado-hermoso-vector-colorido-rojo-negro_685751-413.jpg);
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 560px;
+  padding: 0%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  color: #0f636b;
+  font-family:Stencil Std, fantasy;
+
+}
+
+.imgdetail{
+  height: 300px;
+  width: 300px;
+}
+
+.divdetail1{
+  text-align: left;
+  width: 50%;
+}
+
+.divdetail1, .divdetail2{
+padding: 80px;
+}
+
+.divdetail2{
+  display: flex;
+  justify-content: flex-end;
 }

@@ -10,7 +10,8 @@ const getTeams = async() =>{
             array.push(driver.teams)
             )
         let filteredTeams = new Set(array.join().split(' ').join('').split(','))
-        let teams = [...filteredTeams]
+        let allTeams = [...filteredTeams].filter(team => team !== '')
+        let teams = [...allTeams]
         teams.forEach(async (teams) => 
            await Teams.findOrCreate({where: {name: teams}})
             )
