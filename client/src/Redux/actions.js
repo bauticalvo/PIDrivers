@@ -28,10 +28,11 @@ export function getDrivers(){
     }
     
 }
-export function getDriver(id){
+export function getDriver(idD){
+    console.log(idD);
     return async function(dispach){
-        try {
-      const {data} = await axios.get(`http://localhost:3001/drivers/${id}`)
+        try { console.log(idD);
+      const {data} = await axios.get(`http://localhost:3001/drivers/${idD}`); 
             dispach({                                                          
                 type: DETAIL,
                 payload: data

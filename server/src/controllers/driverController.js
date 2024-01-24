@@ -70,11 +70,13 @@ const getDrivers =async (name) =>{
             await dbDriver.forEach( driver => {
                 if(driver.id == idD) d.teams = driver.teams
             })
+        console.log(`Id de db ${idD}`);
         return d;
         }
         const request = (await axios.get('http://localhost:5000/drivers')).data
         const filteredDrivers = request.find( (driver) => driver.id === Number(idD) 
         )
+        console.log(`Id de api ${idD}`);
         return filteredDrivers;
 }
 

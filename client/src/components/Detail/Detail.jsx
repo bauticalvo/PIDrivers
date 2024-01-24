@@ -10,6 +10,7 @@ const Detail = () => {
   const driverDetail = useSelector(state => state.driverDetail)    
   const driver={}
 
+
   useEffect(()=>{
     dispatch(getDriver(params.id))
     return ()=>{
@@ -23,11 +24,11 @@ const Detail = () => {
       driver.surname= d.name.surname
       driver.image = d.image.url
       driver.teams = d.teams
-    } else {
+    } else  if(d.hasOwnProperty('forename')){
       driver.name= d.forename
       driver.surname = d.surname
       driver.image = d.image
-      driver.teams = d.teams.join(' ,')
+      driver.teams = d.teams.join(',')
     }
 
 
