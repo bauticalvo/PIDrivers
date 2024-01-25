@@ -184,6 +184,9 @@
 .desc{
   width: 700px;
 }
+.dob{
+  width: 250px;
+}
 
 /*  ------  Card ------  */
 
@@ -195,7 +198,7 @@
   height: 340px;
   padding: 10px;
   font-family:Stencil Std, fantasy;
-color: #000;
+color: #b1c8ce;
 word-wrap: break-word;
 }
 

@@ -39,7 +39,7 @@ export const Form = () => {
 
   const validate = (driverData, name)=>{
 
-   const regexChar = /^[a-zA-Z\s'-ñ]+$/
+   const regexChar = /^[a-zA-ZñáéíóúüÁÉÍÓÚÜ\s]+$/u
    const regexDescription = /^[a-zA-Z0-9\s,.ñ]+$/
    const regexDob = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19[0-9][0-9]|20[0-1][0-9]|202[0-3])$/
    const regexImage = /^data:image\/(png|jpeg|jpg|gif);base64,([a-zA-Z0-9+/]+={0,2})$/
@@ -53,8 +53,11 @@ export const Form = () => {
       if(fore.length >0 ){
         if(fore.length > 15) setErrors({...errors, forename: "El nombre no debe tener mas de 15 caracteres"})
         if(fore.length < 3)setErrors({...errors, forename: "El nombre no debe tener menos de 3 caracteres"})
-        if(fore.length>= 3 && fore.length <= 15 )setErrors({...errors, forename: ""})
-        if(!regexChar.test(driverData.forename)) setErrors({...errors, forename: 'El nombre no debe tener caracteres especiales'})
+        if(!regexChar.test(fore)) {
+          setErrors({...errors, forename: 'El nombre no debe tener caracteres especiales'})
+          return
+        }else if(fore.length>= 3 && fore.length <= 15 )setErrors({...errors, forename: ""})
+      
     }
     }
     // ---- Validacion de surname ---- //
@@ -94,7 +97,7 @@ export const Form = () => {
       let date = driverData.dob
       if(date.length === 0) setErrors({...errors, dob: "Debe ingresar la fecha de nacimiento"})
       if(date.length > 0){
-        if(!regexDob.test(driverData.dob)) setErrors({...errors, dob: 'Debe ingresar una fecha valida'})
+        if(!regexDob.test(driverData.dob)) setErrors({...errors, dob: 'Debe ingresar una fecha valida. Por ej: dd/mm/aaaa'})
         else setErrors({...errors, dob: ''})
       }
     }
@@ -115,12 +118,19 @@ export const Form = () => {
   const handleChange = (event) =>{
     event.preventDefault();
     if(event.target.name === 'teams'){
-      if(driverData.teams.includes(event.target.value)) return;    // para que no se repita los teams en el select
-      setdriverData({
+      if(driverData.teams.includes(event.target.value)){            // para que no se repita los teams en el select
+        const filteredT = driverData.teams.filter(team => team !== event.target.value)
+        setdriverData({
+          ...driverData,
+          [event.target.name]: filteredT
+        })
+      }else {
+        setdriverData({
         ...driverData,
         [event.target.name]: [...driverData[event.target.name], event.target.value]
       })
       return
+      }    
     }
     setdriverData({
       ...driverData,
@@ -170,14 +180,13 @@ export const Form = () => {
         <p>{errors.nationality ? errors.nationality : null}</p>
         <input type='text' name='image' placeholder='URL de la imagen' className='image' onChange={handleChange} ></input>
         <p>{errors.image ? errors.image : null}</p>
-        <input type='text' name='dob' placeholder='Fecha de Nacimiento' onChange={handleChange} ></input>
+        <input type='text' name='dob' placeholder='Fecha de Nacimiento. Ej: dd/mm/aaaa' className='dob' onChange={handleChange} ></input>
         <p>{errors.dob ? errors.dob : null}</p>
         <input type='text' name='description' placeholder='Descripcion' className='desc' onChange={handleChange} ></input>
         <p>{errors.description ? errors.description : null}</p>
         <div>
-          <label>Seleccionar Escuderias</label>
           <select onChange={handleChange} name='teams' >
-            
+            <option disabled selected value=''  >Seleccione una/s escuderia/s</option>
             {
               teams.map( team => 
               <option 
